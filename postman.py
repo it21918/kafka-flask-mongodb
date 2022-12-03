@@ -8,6 +8,19 @@ import json
 
 app = Flask(__name__)
 
+# Endpoint for deleting user
+@app.route("/delete/<email>", methods=["DELETE"])
+def guide_delete(email):
+    dbname = get_database()    
+    collection_name = dbname["users"]
+
+    myquery = { "email": email }
+    try:
+        collection_name.delete_one(myquery)
+        return dumps({'message' : 'SUCCESS'})
+    except Exception as e:
+        return dumps({'error' : str(e)})
+
 # POST API
 @app.route('/add', methods = ['POST'])
 def post_data():
