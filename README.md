@@ -38,7 +38,7 @@ wget https://dlcdn.apache.org/kafka/3.3.1/kafka_2.12-3.3.1.tgz
 ```
 ### Unzip the binary package to a installation folder.
 ```
-tar -xvzf  kafka_2.13-3.2.0.tgz
+tar -xvzf  kafka_2.12-3.2.0.tgz
 ```
 ### Setup environment variables by editing file ~/.bashrc.
  ```
@@ -46,7 +46,7 @@ tar -xvzf  kafka_2.13-3.2.0.tgz
 ```
 ### Add the following environment variables:
 ```
-export KAFKA_HOME=~/kafka_2.13-3.2.0/
+export KAFKA_HOME=~/kafka_2.12-3.2.0/
 ```
 ### Save the file and source the changes.
 ```
