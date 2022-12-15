@@ -30,7 +30,7 @@ def post_data():
     try:
         data = json.loads(request.data)
         user_email = data['email']
-        if user_name and user_contact:
+        if user_email:
             status = collection_name.insert_one({
                 "email" : user_email
             })
