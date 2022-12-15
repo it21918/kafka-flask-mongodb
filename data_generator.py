@@ -5,27 +5,26 @@ from datetime import date
 #get articles
 def get_articles(topic) :
 
-    today = date.today()
+    date_today = date.today()
 
     #y/mm/dd
-    date_y_mm_dd = today.strftime("%y-%m-%d")
+    date_today = date_today.strftime("%y-%m-%d")
 
-    url = "https://newsapi.org/v2/everything?q=" + topic + "&from=" + date_y_mm_dd + "&sortBy=publishedAt&apiKey=a7a6905553244317a359d0f330d3b3e2"
+    url = "https://newsapi.org/v2/everything?q=" + topic + "&from=" + date_today + "&sortBy=publishedAt&apiKey=a7a6905553244317a359d0f330d3b3e2"
 
     payload = {}
     headers = {}
 
     response = requests.request("GET", url, headers=headers, data=payload)
 
-    return response.text
+    return json.loads(response.text)
 
 #get description of source domain names
-def domain_names_description(jsonFile):
-    j = json.loads(jsonFile)
+def domain_names_description(json_file):
     wiki = []
 
-    if j is not None:
-        for s in j.get('articles'):
+    if json_file is not None:
+        for s in json_file.get('articles'):
             wiki.append(mediaWiki(s.get('source')['name']))
 
     return  wiki
@@ -42,6 +41,6 @@ def mediaWiki(source):
     
     for d in json.loads(response.text)['query'].get('pages'): 
         try:
-            return (d['extract'])  
+            return {"title" : d['title'] , "description": d['extract']}
         except KeyError:
             return 

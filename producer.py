@@ -4,7 +4,7 @@ from datetime import datetime
 from data_generator import  get_articles, mediaWiki, domain_names_description
 from kafka import KafkaProducer
 from pymongo_get_database import get_database
-
+from bson import json_util
 
 
 # Messages will be serialized as JSON
