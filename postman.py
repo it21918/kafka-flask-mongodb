@@ -42,6 +42,15 @@ def guide_delete(email):
 #     print(keyword)
 #     return dbname[keyword].collection_name.find()
 
+
+def get_dom(article):
+    print(article)
+    return
+
+def split(a_list):
+    half = len(list(a_list))//2
+    return a_list[:half], a_list[half:]
+
 #get
 @app.route('/get/<string:email>', methods=["GET"])
 def get_data(email):
@@ -51,13 +60,16 @@ def get_data(email):
     for keyword in user['keywords']:
         print(keyword)
         articles_cursor = dbname[keyword].find()
+        first, second = split(articles_cursor)
         #articles_cursor = articles_cursor.toArray()
         #print(articles_cursor[0])
 
-        # t1 = threading.Thread(target=get_articles, args=keyword)
+        for article in first:
+            t1 = threading.Thread(target=get_dom, args=article)
+            t1.start()
+        
         # t2 = threading.Thread(target=get_dom, args=get_articles(keyword))
  
-        # t1.start()
         # t2.start()
         # t1.join()
         # t2.join()
