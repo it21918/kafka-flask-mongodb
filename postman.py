@@ -8,14 +8,7 @@ import json
 from bson import ObjectId
 from serializers import JSONEncoder
 import threading
-
-def to_representation(value):
-    try:
-        result = json.dumps(value, skipkeys=True, allow_nan=True,cls=JSONEncoder)
-        return result
-    except ValueError:
-        return ''
-
+from collections import defaultdict
 
 app = Flask(__name__)
 
@@ -33,20 +26,6 @@ def guide_delete(email):
         return dumps({'error' : str(e)})
 
 
-# def get_dom(articles_cursor):
-#     for article in articles_cursor['articles']:
-#         print(article.get('source')['name'])
-
-# def get_articles(keyword):
-#     dbname = get_database()
-#     print(keyword)
-#     return dbname[keyword].collection_name.find()
-
-
-def get_dom(article):
-    print(article)
-    return
-
 def split(a_list):
     half = len(list(a_list))//2
     return a_list[:half], a_list[half:]
@@ -58,27 +37,25 @@ def get_data(email):
 
     user = dbname["users"].find_one({"email": email}, {"keywords" : 1})
     for keyword in user['keywords']:
-        print(keyword)
-        articles_cursor = dbname[keyword].find()
-        first, second = split(articles_cursor)
-        #articles_cursor = articles_cursor.toArray()
-        #print(articles_cursor[0])
+        object_cursor = dbname[keyword].find()
 
-        for article in first:
-            t1 = threading.Thread(target=get_dom, args=article)
-            t1.start()
+        for objs in object_cursor:
+            articles = json.loads(objs[keyword])
+            for s in articles.get('articles'):
+                source_domain = dbname['domain_name_description'].find_one({'title' : s.get('source')['name']}, {'description' : 1})
+                if source_domain is not ('' or None):
+                    key = "Article:" + str(s) + "  source domains description:" + str(s['description'])
+                    dictionary = {key : s.get('source')['name']}
+                else :
+                    key = "Article:" + str(s) + "  source domains description: None"
+                    dictionary = {key : s.get('source')['name']}
+                    
+        break
+    res = defaultdict(list)
+    for key, val in sorted(dictionary.items()):
+        res[val].append(key)
+    return ("Grouped dictionary is : " + str(dict(res)))
         
-        # t2 = threading.Thread(target=get_dom, args=get_articles(keyword))
- 
-        # t2.start()
-        # t1.join()
-        # t2.join()
-
-
-    # for article in articles_cursor['articles']:
-    #     print(article.get('source')['name'])
-
-    return ''
 
 # POST API
 @app.route('/add', methods = ['POST'])
@@ -114,4 +91,4 @@ def post_data():
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=7600, debug=True)
+    app.run(host="localhost", port=6993, debug=True)

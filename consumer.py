@@ -10,9 +10,12 @@ def save_source_descriptions():
     #Insert producer's messeges in MongoDB for topic sourceDomainNames
     for message in consumerOfDomainNames:
         data = json.loads(message.value)
-        if data:
-            collection_name.insert_one({'description' : data})
-
+        for value in data:
+            if value is not None:
+                collection_name.insert_one({
+                    'title' :value.get('title') ,
+                    'description' : value['description']
+                })
  
 def save_articles():
     #Insert producer's messeges in MongoDB for multi article topics
