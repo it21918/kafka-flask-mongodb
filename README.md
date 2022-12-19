@@ -5,6 +5,7 @@ source myvenv/bin/activate
 python -m pip install -r requirements.txt
 python consumer.py
 python producer.py
+python postman.py
 ```
 
 
@@ -46,7 +47,7 @@ tar -xvzf  kafka_2.12-3.3.1.tgz
 ```
 ### Add the following environment variables:
 ```
-export KAFKA_HOME=~/kafka_2.12-3.3.1/
+export KAFKA_HOME=~/kafka_2.12-3.3.1
 ```
 ### Save the file and source the changes.
 ```
