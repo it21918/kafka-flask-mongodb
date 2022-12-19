@@ -50,7 +50,7 @@ def get_data(email):
                     key = "Article:" + str(s) + "  source domains description: None"
                     dictionary = {key : s.get('source')['name']}
                     
-        break
+        
     res = defaultdict(list)
     for key, val in sorted(dictionary.items()):
         res[val].append(key)
