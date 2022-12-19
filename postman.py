@@ -6,7 +6,6 @@ from pymongo import MongoClient
 from bson.json_util import dumps
 import json
 from bson import ObjectId
-from serializers import JSONEncoder
 import threading
 from collections import defaultdict
 
@@ -26,9 +25,6 @@ def guide_delete(email):
         return dumps({'error' : str(e)})
 
 
-def split(a_list):
-    half = len(list(a_list))//2
-    return a_list[:half], a_list[half:]
 
 #get
 @app.route('/get/<string:email>', methods=["GET"])
@@ -55,7 +51,18 @@ def get_data(email):
     for key, val in sorted(dictionary.items()):
         res[val].append(key)
     return ("Grouped dictionary is : " + str(dict(res)))
-        
+
+@app.route('/update/<string:email>', methods = ['PUT'])
+def update_data(email):
+    dbname = get_database()    
+    try:
+        data = json.loads(request.data)
+        keywords = data['keywords']
+        status = dbname["users"].update_one({"email":email},{"$set": {"keywords":keywords}})
+        print(status)
+        return dumps({'message' : 'SUCCESS'})
+    except Exception as e:
+        return dumps({'error' : str(e)})        
 
 # POST API
 @app.route('/add', methods = ['POST'])
