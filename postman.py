@@ -68,7 +68,6 @@ def update_data(email):
 @app.route('/add', methods = ['POST'])
 def post_data():
     dbname = get_database()    
-    collection_name = dbname["users"]
 
     try:
         data = json.loads(request.data)
@@ -76,13 +75,10 @@ def post_data():
         user_city = data['city']
         keywords = data['keywords']
         if user_email:
-            status = collection_name.insert_one({
-                "email" : user_email,
-                "city" : user_city,
-                "timestamp" : time.time(),
-                "keywords" : keywords
-
-            })
+            #status = collection_name.insert_one({"email" : user_email,"city" : user_city,"timestamp" : time.time(),"keywords" : keywords})
+            status = dbname["users"].replace_one(
+                {"email" : user_email},
+                {"email": user_email, "city" : user_city,"timestamp" : time.time(),"keywords" : keywords},  upsert=True)
         print(status)
         return dumps({'message' : 'SUCCESS'})
     except Exception as e:
