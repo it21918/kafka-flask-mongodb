@@ -7,8 +7,13 @@ python consumer.py
 python producer.py
 python postman.py
 ```
-
-
+# RabbitMQ 
+## Install rabbitMQ 
+sudo apt-get install rabbitmq-server
+## Start server 
+sudo su
+sudo systemctl start rabbitmq-server
+sudo systemctl enable rabbitmq-server
 
 # Install and Run Kafka 3.3.1 On WSL
 ## Install java 
