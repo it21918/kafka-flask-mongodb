@@ -8,7 +8,7 @@ python producer.py
 python postman.py
 ```
 
-##Create plot
+## Create plot
 ```
 python3 plot.py
 ```
