@@ -8,6 +8,11 @@ python producer.py
 python postman.py
 ```
 
+##Create plot
+```
+python3 plot.py
+```
+
 # Install and Run Kafka 3.3.1 On WSL
 ## Install java 
 ```
