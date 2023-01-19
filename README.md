@@ -2,10 +2,10 @@
 ```
 python3 -m venv myvenv
 source myvenv/bin/activate
-python -m pip install -r requirements.txt
-python consumer.py
-python producer.py
-python postman.py
+python3 -m pip install -r requirements.txt
+python3 consumer.py
+python3 producer.py
+python3 postman.py
 ```
 
 ## Create plot
