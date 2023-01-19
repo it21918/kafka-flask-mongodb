@@ -3,6 +3,7 @@ import threading
 from kafka import KafkaConsumer
 from kafka.structs import TopicPartition
 from pymongo_get_database import get_database
+from datetime import datetime
 
 def save_source_descriptions():
     collection_name = dbname["domain_name_description"]
@@ -21,8 +22,10 @@ def save_articles():
     #Insert producer's messeges in MongoDB for multi article topics
     for message in consumerOfTopics:
         collection_name = dbname[message.topic]
-        data = json.loads(message.value)
-        collection_name.insert_one({message.topic : data})
+        articles = json.loads(message.value)
+        for article in articles.get('articles'):
+            collection_name.insert_one({'Published':datetime.now(),'article' : article})
+        
 
 
 

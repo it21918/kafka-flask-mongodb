@@ -1,6 +1,11 @@
 import json
 import requests
 from datetime import date
+from bson.objectid import ObjectId
+import itertools 
+import datetime
+import networkx as nx
+from pymongo_get_database import get_database
 
 #get articles
 def get_articles(topic) :
@@ -44,3 +49,38 @@ def mediaWiki(source):
             return {"title" : d['title'] , "description": d['extract']}
         except KeyError:
             return 
+
+def getGraphData():
+    topics = ['tesla', 'apple', 'microsoft', 'nasa', 'amazon', 'BBC', 'cloud', 'fiat'] 
+    dbname = get_database()    
+    articles = []
+
+    for topic in topics :
+        articlesCursor = dbname[topic].find()
+
+        for article in articlesCursor:
+            article = json.loads(json.dumps(article, default=str))
+            articles.append([str(article['_id']), str(article['article']['publishedAt']), str(article['article']['source']['name']) , str(article['article']['author'])])
+
+    sorted(articles,key=lambda x: x[1])
+    return articles
+
+def createGraph(articles=getGraphData()):
+    i = 0
+    G = nx.Graph()
+
+    for article in articles:
+        G.add_node(article[0])
+        for data in itertools.islice((articles), i, len(articles)):
+            G.add_node(data[0])
+
+            if data[2] == article[2]:
+                G.add_edge(data[0], article[0])
+            elif data[3] == article[3]:
+                G.add_edge(data[0], article[0])
+            else:
+                G.add_edge(article[0], articles[i][0])
+        i = i + 1
+
+    nx.write_gml(G, "graphFile.py")
+    return G

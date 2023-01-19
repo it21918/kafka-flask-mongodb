@@ -8,6 +8,7 @@ import json
 from bson import ObjectId
 import threading
 from collections import defaultdict
+import networkx as nx
 
 app = Flask(__name__)
 
@@ -24,32 +25,40 @@ def guide_delete(email):
     except Exception as e:
         return dumps({'error' : str(e)})
 
+#Get recommended article id
+@app.route("/<string:id>", methods = ['GET'])
+def getNeighborBiggestDeggree(id):
+    G = nx.read_gml("graphFile.py")
+    try:
+        neighbors = nx.neighbors(G, id)
+        return max(G.degree(list(neighbors)))
+    except Exception as e:
+        return dumps({'error' : str(e)})
 
-
-#get
 @app.route('/get/<string:email>', methods=["GET"])
 def get_data(email):
-    dbname = get_database()    
+    dbname = get_database()  
+    res = defaultdict(list)
 
     user = dbname["users"].find_one({"email": email}, {"keywords" : 1})
     for keyword in user['keywords']:
         object_cursor = dbname[keyword].find()
 
         for objs in object_cursor:
-            articles = json.loads(objs[keyword])
-            for s in articles.get('articles'):
-                source_domain = dbname['domain_name_description'].find_one({'title' : s.get('source')['name']}, {'description' : 1})
-                if source_domain is not ('' or None):
-                    key = "Article:" + str(s) + "  source domains description:" + str(s['description'])
-                    dictionary = {key : s.get('source')['name']}
-                else :
-                    key = "Article:" + str(s) + "  source domains description: None"
-                    dictionary = {key : s.get('source')['name']}
-                    
-        
-    res = defaultdict(list)
-    for key, val in sorted(dictionary.items()):
-        res[val].append(key)
+            article = json.loads(json.dumps(objs, default=str))
+
+            source_domain = dbname['domain_name_description'].find_one({'title' : article['article']['source']['name']}, {'description' : 1})
+            if source_domain is not ('' or None):
+                key = "Article "+ keyword + ": " + str(article['article']) + "  source domains description:" + str(source_domain['description'])
+                dictionary = {key : article['article']['source']['name']}
+                for key, val in sorted(dictionary.items()):
+                    res[val].append(key)            
+            else :
+                key = "Article "+ keyword + ": " + str(article['article']) + "  source domains description: None"
+                dictionary = {key : article['article']['source']['name']}
+                for key, val in sorted(dictionary.items()):
+                    res[val].append(key)   
+
     return ("Grouped dictionary is : " + str(dict(res)))
 
 @app.route('/update/<string:email>', methods = ['PUT'])
@@ -94,4 +103,4 @@ def post_data():
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=6993, debug=True)
+    app.run(host="localhost", port=8000, debug=True)
