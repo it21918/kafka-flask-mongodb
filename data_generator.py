@@ -54,26 +54,26 @@ def getGraphData():
     topics = ['tesla', 'apple', 'microsoft', 'nasa', 'amazon', 'BBC', 'cloud', 'fiat'] 
     dbname = get_database()    
     articles = []
+    G = nx.Graph()
 
     for topic in topics :
         articlesCursor = dbname[topic].find()
 
         for article in articlesCursor:
+
             article = json.loads(json.dumps(article, default=str))
             articles.append([str(article['_id']), str(article['article']['publishedAt']), str(article['article']['source']['name']) , str(article['article']['author'])])
+            G.add_node(str(article['_id']))
 
     sorted(articles,key=lambda x: x[1])
-    return articles
+    return G, articles
 
-def createGraph(articles=getGraphData()):
+def createGraph():
     i = 0
-    G = nx.Graph()
+    G, articles = getGraphData()
 
     for article in articles:
-        G.add_node(article[0])
         for data in itertools.islice((articles), i, len(articles)):
-            G.add_node(data[0])
-
             if data[2] == article[2]:
                 G.add_edge(data[0], article[0])
             elif data[3] == article[3]:
