@@ -69,7 +69,7 @@ def getGraphData():
     return G, articles
 
 def createGraph():
-    i = 0
+    i = 1
     G, articles = getGraphData()
 
     for article in articles:
