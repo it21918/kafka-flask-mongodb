@@ -5,6 +5,7 @@ import datetime
 from pymongo_get_database import get_database
 
 def get_record_count(keyword, n, j):
+    #Published is the date when the article got saved in the database.
     data = {
         "Published": {
             "$lt": datetime.datetime.today() - datetime.timedelta(days=n) ,

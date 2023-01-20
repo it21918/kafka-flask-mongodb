@@ -1,7 +1,7 @@
 import time
 import json
 from datetime import datetime
-from data_generator import  get_articles, mediaWiki, domain_names_description, createGraph
+from data_generator import  get_articles, mediaWiki, domain_names_description
 from kafka import KafkaProducer
 from pymongo_get_database import get_database
 from bson import json_util
@@ -24,7 +24,6 @@ if __name__ == '__main__':
     while True:
 
         topics = ['tesla', 'apple', 'microsoft', 'nasa', 'amazon', 'BBC', 'cloud', 'fiat'] 
-        createGraph()
 
         # Send article to our consumer
         for topic in topics:

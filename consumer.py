@@ -4,6 +4,7 @@ from kafka import KafkaConsumer
 from kafka.structs import TopicPartition
 from pymongo_get_database import get_database
 from datetime import datetime
+from data_generator import createGraph
 
 def save_source_descriptions():
     collection_name = dbname["domain_name_description"]
@@ -25,7 +26,7 @@ def save_articles():
         articles = json.loads(message.value)
         for article in articles.get('articles'):
             collection_name.insert_one({'Published':datetime.now(),'article' : article})
-        
+        createGraph()
 
 
 
