@@ -2,21 +2,12 @@
 ```
 python3 -m venv myvenv
 source myvenv/bin/activate
-python3 -m pip install -r requirements.txt
-python3 consumer.py
-python3 producer.py
-python3 postman.py
+python -m pip install -r requirements.txt
+python consumer.py
+python producer.py
 ```
 
-## Create plot
-```
-python3 plot.py
-```
 
-## Install PyTorch for sentiment analysis
-```
-pip3 install torch torchvision torchaudio
-```
 
 # Install and Run Kafka 3.3.1 On WSL
 ## Install java 
@@ -55,7 +46,7 @@ tar -xvzf  kafka_2.12-3.3.1.tgz
 ```
 ### Add the following environment variables:
 ```
-export KAFKA_HOME=~/kafka_2.12-3.3.1
+export KAFKA_HOME=~/kafka_2.12-3.3.1/
 ```
 ### Save the file and source the changes.
 ```

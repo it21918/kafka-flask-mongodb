@@ -23,19 +23,16 @@ def save_author_tweets():
     #Insert producer's messeges in MongoDB for topic sourceDomainNames
     for message in consumerOfTweets:
         data = json.loads(message.value)
-        print(data)
         for value in data:
             if value is not None:
-                print(value)
-            #     collection_name.insert_one({
-            #         'author' :value.get('author') ,
-            #         'description' : value['description']
-            # })
+                collection_name.insert_one({
+                    'author' :value[0] ,
+                    'tweets' : value[1]
+            })
 
 def save_articles():
     #Insert producer's messeges in MongoDB for multi article topics
     for message in consumerOfTopics:
-        print(message)
         collection_name = dbname[message.topic]
         articles = json.loads(message.value)
         for article in articles.get('articles'):
@@ -74,13 +71,14 @@ if __name__ == '__main__':
     t3 = threading.Thread(target=save_author_tweets)
  
     # starting thread 1
-    t1.start()
+    # t1.start()
     # starting thread 2
-    t2.start()
+    # t2.start()
     t3.start()
  
     # wait until thread 1 is completely executed
-    t1.join()
+    # t1.join()
     # wait until thread 2 is completely executed
-    t2.join()
+    # t2.join()
+
     t3.join()

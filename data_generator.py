@@ -8,6 +8,49 @@ import networkx as nx
 from pymongo_get_database import get_database
 from tweets import get_tweets
 
+def translate(id,words,target):
+    dbname = get_database() 
+    topics = ['tesla', 'apple', 'microsoft', 'nasa', 'amazon', 'BBC', 'cloud', 'fiat'] 
+    for topic in topics :
+        article = dbname[topic].find_one({'_id': ObjectId('63c427ae0192e94191816bcb')})
+        if article is not None:
+            break
+
+    json_article = json.dumps(article['article']['title'])
+    json_article = json.loads(json_article)
+
+    url = "https://google-translate1.p.rapidapi.com/language/translate/v2"
+
+    payload = "q="+str(json_article)+"&target="+target+"&source=es"
+    headers = {
+        "content-type": "application/x-www-form-urlencoded",
+        "Accept-Encoding": "application/gzip",
+        "X-RapidAPI-Key": "ea88597d35msh69b58538a4a3277p1264a1jsn3d0475fcf729",
+        "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+    response = json.loads(response.text)
+    print(response['data']['translations'][0]['translatedText'])
+    return response['data']['translations'][0]['translatedText']
+
+
+def detect_lan(word):
+    url = "https://google-translate1.p.rapidapi.com/language/translate/v2/detect"
+    print(word)
+    payload = word
+    headers = {
+        "content-type": "application/x-www-form-urlencoded",
+        "Accept-Encoding": "application/gzip",
+        "X-RapidAPI-Key": "ea88597d35msh69b58538a4a3277p1264a1jsn3d0475fcf729",
+        "X-RapidAPI-Host": "google-translate1.p.rapidapi.com"
+    }
+
+    response = requests.request("POST", url, data=payload, headers=headers)
+    response = json.loads(response.text)
+    print(response.text)
+    return response.txt
+
 #get articles
 def get_articles(topic) :
 

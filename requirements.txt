@@ -12,3 +12,4 @@ matplotlib
 pandas
 snscrape
 transformers
+scipy
