@@ -1,7 +1,6 @@
 import json
 import threading
 from kafka import KafkaConsumer
-from kafka.structs import TopicPartition
 from pymongo_get_database import get_database
 from datetime import datetime
 from data_generator import createGraph
@@ -19,9 +18,24 @@ def save_source_descriptions():
                     'description' : value['description']
                 })
  
+def save_author_tweets():
+    collection_name = dbname["tweets"]
+    #Insert producer's messeges in MongoDB for topic sourceDomainNames
+    for message in consumerOfTweets:
+        data = json.loads(message.value)
+        print(data)
+        for value in data:
+            if value is not None:
+                print(value)
+            #     collection_name.insert_one({
+            #         'author' :value.get('author') ,
+            #         'description' : value['description']
+            # })
+
 def save_articles():
     #Insert producer's messeges in MongoDB for multi article topics
     for message in consumerOfTopics:
+        print(message)
         collection_name = dbname[message.topic]
         articles = json.loads(message.value)
         for article in articles.get('articles'):
@@ -49,15 +63,24 @@ if __name__ == '__main__':
         auto_offset_reset='earliest'
     )
 
+    consumerOfTweets = KafkaConsumer(
+        'tweets_for_authors',
+        bootstrap_servers='localhost:9092',
+        auto_offset_reset='earliest'
+    )
+
     t1 = threading.Thread(target=save_source_descriptions)
     t2 = threading.Thread(target=save_articles)
+    t3 = threading.Thread(target=save_author_tweets)
  
     # starting thread 1
     t1.start()
     # starting thread 2
     t2.start()
+    t3.start()
  
     # wait until thread 1 is completely executed
     t1.join()
     # wait until thread 2 is completely executed
     t2.join()
+    t3.join()

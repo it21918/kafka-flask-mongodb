@@ -40,4 +40,3 @@ def analysis(tweet):
         s = scores[i]
         print(l,s)
     return labels, scores
-

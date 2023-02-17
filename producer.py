@@ -1,7 +1,7 @@
 import time
 import json
 from datetime import datetime
-from data_generator import  get_articles, mediaWiki, domain_names_description
+from data_generator import  get_articles, mediaWiki, domain_names_description, tweets_for_authors
 from kafka import KafkaProducer
 from pymongo_get_database import get_database
 from bson import json_util
@@ -28,7 +28,9 @@ if __name__ == '__main__':
         # Send article to our consumer
         for topic in topics:
             articles = get_articles(topic)
+            authors_tweets = tweets_for_authors(articles)
             description = domain_names_description(articles)
+            producer.send('tweets_for_authors', authors_tweets)
             producer.send(topic,  articles)
             producer.send('sourcesDomainName', description)
 

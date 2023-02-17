@@ -6,6 +6,7 @@ import itertools
 import datetime
 import networkx as nx
 from pymongo_get_database import get_database
+from tweets import get_tweets
 
 #get articles
 def get_articles(topic) :
@@ -34,6 +35,16 @@ def domain_names_description(json_file):
 
     return  wiki
 
+def tweets_for_authors(json_file):
+    authors = []
+
+    if json_file is not None:
+        for s in json_file.get('articles'):
+            tweets = get_tweets(s.get('author'))
+            authors.append([s.get('author'), tweets])
+
+    return  authors
+
 def mediaWiki(source):
     url = "https://en.wikipedia.org/w/api.php?action=query&prop=extracts&exsentences=10&exlimit=1&titles=" + source + "&explaintext=1&formatversion=2&format=json"
 
@@ -54,7 +65,7 @@ def getGraphData():
     topics = ['tesla', 'apple', 'microsoft', 'nasa', 'amazon', 'BBC', 'cloud', 'fiat'] 
     dbname = get_database()    
     articles = []
-    G = nx.Graph()
+    G = nx.Graph()  
 
     for topic in topics :
         articlesCursor = dbname[topic].find()
