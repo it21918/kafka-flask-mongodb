@@ -13,6 +13,11 @@ python3 postman.py
 python3 plot.py
 ```
 
+## Install PyTorch for sentiment analysis
+```
+pip3 install torch torchvision torchaudio
+```
+
 # Install and Run Kafka 3.3.1 On WSL
 ## Install java 
 ```
