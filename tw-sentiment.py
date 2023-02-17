@@ -39,5 +39,5 @@ def analysis(tweet):
         l = labels[i]
         s = scores[i]
         print(l,s)
-    return scores
+    return labels, scores
 
