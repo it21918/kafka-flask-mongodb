@@ -15,7 +15,7 @@ def get_articles(topic) :
     #y/mm/dd
     date_today = date_today.strftime("%y-%m-%d")
 
-    url = "https://newsapi.org/v2/everything?q=" + topic + "&from=" + date_today + "&sortBy=publishedAt&apiKey=a7a6905553244317a359d0f330d3b3e2"
+    url = "https://newsapi.org/v2/top-headlines?q=" + topic + "&from=" + date_today + "&sortBy=publishedAt&apiKey=a7a6905553244317a359d0f330d3b3e2"
 
     payload = {}
     headers = {}
