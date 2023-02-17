@@ -10,3 +10,5 @@ datetime~=4.7
 networkx==3.0
 matplotlib
 pandas
+snscrape
+transformers
