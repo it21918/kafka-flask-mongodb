@@ -1,9 +1,8 @@
 from transformers import AutoTokenizer, AutoModelForSequenceClassification
 from scipy.special import softmax
+from data_generator import translate_text
 
 def analysis(tweet):
-    tweet = tweet
-
     # precprcess tweet
     tweet_words = []
 
@@ -18,16 +17,16 @@ def analysis(tweet):
     tweet_proc = " ".join(tweet_words)
 
     # load model and tokenizer
-    roberta = "cardiffnlp/twitter-xlm-roberta-base-sentiment"
+    roberta = "cardiffnlp/twitter-roberta-base-sentiment"
 
     model = AutoModelForSequenceClassification.from_pretrained(roberta)
     tokenizer = AutoTokenizer.from_pretrained(roberta)
-    tokenizer.model_max_length = 512
+
     labels = ['Negative', 'Neutral', 'Positive']
 
+    tweet_proc = translate_text(tweet_proc, 'en')
     # sentiment analysis
     encoded_tweet = tokenizer(tweet_proc, return_tensors='pt')
-    
     # output = model(encoded_tweet['input_ids'], encoded_tweet['attention_mask'])
     output = model(**encoded_tweet)
 

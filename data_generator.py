@@ -16,7 +16,7 @@ endpoint = 'https://api.cognitive.microsofttranslator.com'
 detectlanguage.configuration.api_key = "cbd4f69ae68cfcb38ddf0dd115caa1ef"
 
 
-def translate(id,target):
+def find_article_byId(id):
     dbname = get_database()
     topics = ['tesla', 'apple', 'microsoft',
               'nasa', 'amazon', 'BBC', 'cloud', 'fiat']
@@ -26,17 +26,14 @@ def translate(id,target):
         if article is not None:
             break
 
-
     json_article = json.dumps(article['article']['title'])
     json_article = json.loads(json_article)
-    print(str(json_article))
-    translation = translate_text(str(json_article),target)
-    print(translation)
+    return json_article
 
 
 
 
-def translate_text(text, to_lang):
+def translate_text(text, to_lang='en'):
 
     from_lang=detectlanguage.detect(text)[0]['language']
     path = '/translate?api-version=3.0'
