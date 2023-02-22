@@ -7,7 +7,7 @@ python consumer.py
 python producer.py
 ```
 
-#I nstall Pytorch for sentiment analysis
+# Install Pytorch for sentiment analysis
 ```
 pip3 install torch torchvision torchaudio
 ```
