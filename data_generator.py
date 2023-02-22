@@ -10,11 +10,13 @@ from tweets import get_tweets
 import detectlanguage
 import uuid
 
+
 subscription_key = '38034e5c513344ada45bf089588763fc'
 endpoint = 'https://api.cognitive.microsofttranslator.com'
+detectlanguage.configuration.api_key = "cbd4f69ae68cfcb38ddf0dd115caa1ef"
 
 
-def translate(target, id):
+def translate(id,target):
     dbname = get_database()
     topics = ['tesla', 'apple', 'microsoft',
               'nasa', 'amazon', 'BBC', 'cloud', 'fiat']
@@ -27,21 +29,23 @@ def translate(target, id):
 
     json_article = json.dumps(article['article']['title'])
     json_article = json.loads(json_article)
-    #print(str(json_article))
-    text = "Hello, how are you?"
-    translation = translate_text("text","fr")
+    print(str(json_article))
+    translation = translate_text(str(json_article),target)
     print(translation)
 
 
 
 
 def translate_text(text, to_lang):
+
+    from_lang=detectlanguage.detect(text)[0]['language']
     path = '/translate?api-version=3.0'
-    params = f'&from=auto&to={to_lang}'
+    params = f'&from={from_lang}&to={to_lang}'
     constructed_url = endpoint + path + params
     
     headers = {
         'Ocp-Apim-Subscription-Key': subscription_key,
+        'Ocp-Apim-Subscription-Region': 'westeurope',
         'Content-type': 'application/json',
         'X-ClientTraceId': str(uuid.uuid4())
     }
@@ -52,9 +56,12 @@ def translate_text(text, to_lang):
     
     response = requests.post(constructed_url, headers=headers, json=body)
     json_response = response.json()
-    print(json_response)
-   # translation = json_response[0]['translations'][0]['text']
-    return json_response
+    translation = json_response[0]['translations'][0]['text']
+    return translation
+
+    
+
+
 
 
 #get articles
