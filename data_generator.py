@@ -11,9 +11,9 @@ import detectlanguage
 import uuid
 
 
-subscription_key = '38034e5c513344ada45bf089588763fc'
+subscription_key = 'api_key'
 endpoint = 'https://api.cognitive.microsofttranslator.com'
-detectlanguage.configuration.api_key = "cbd4f69ae68cfcb38ddf0dd115caa1ef"
+detectlanguage.configuration.api_key = "api_key"
 
 
 def find_article_byId(id):
