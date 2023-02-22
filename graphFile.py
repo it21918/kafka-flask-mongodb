@@ -1,7 +1,7 @@
 graph [
   node [
     id 0
-    label "63c427c10192e94191816dc5"
+    label "c"
   ]
   node [
     id 1

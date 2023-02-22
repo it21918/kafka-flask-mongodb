@@ -18,15 +18,16 @@ def analysis(tweet):
     tweet_proc = " ".join(tweet_words)
 
     # load model and tokenizer
-    roberta = "cardiffnlp/twitter-roberta-base-sentiment"
+    roberta = "cardiffnlp/twitter-xlm-roberta-base-sentiment"
 
     model = AutoModelForSequenceClassification.from_pretrained(roberta)
     tokenizer = AutoTokenizer.from_pretrained(roberta)
-
+    tokenizer.model_max_length = 512
     labels = ['Negative', 'Neutral', 'Positive']
 
     # sentiment analysis
     encoded_tweet = tokenizer(tweet_proc, return_tensors='pt')
+    
     # output = model(encoded_tweet['input_ids'], encoded_tweet['attention_mask'])
     output = model(**encoded_tweet)
 

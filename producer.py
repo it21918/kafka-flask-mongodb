@@ -14,7 +14,7 @@ def serializer(message):
 
 # Kafka Producer
 producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
+    bootstrap_servers=['34.138.148.38:9092'],
     value_serializer=serializer
 )
 

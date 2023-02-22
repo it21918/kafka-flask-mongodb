@@ -23,6 +23,7 @@ def save_author_tweets():
     #Insert producer's messeges in MongoDB for topic sourceDomainNames
     for message in consumerOfTweets:
         data = json.loads(message.value)
+        print(data)
         for value in data:
             if value is not None:
                 collection_name.insert_one({
@@ -50,19 +51,19 @@ if __name__ == '__main__':
     # Kafka Consumers
     consumerOfTopics = KafkaConsumer(
         *topics,
-        bootstrap_servers='localhost:9092',
+        bootstrap_servers='34.138.148.38:9092',
         auto_offset_reset='earliest'
     )
 
     consumerOfDomainNames = KafkaConsumer(
         'sourcesDomainName',
-        bootstrap_servers='localhost:9092',
+        bootstrap_servers='34.138.148.38:9092',
         auto_offset_reset='earliest'
     )
 
     consumerOfTweets = KafkaConsumer(
         'tweets_for_authors',
-        bootstrap_servers='localhost:9092',
+        bootstrap_servers='34.138.148.38:9092',
         auto_offset_reset='earliest'
     )
 
@@ -71,14 +72,14 @@ if __name__ == '__main__':
     t3 = threading.Thread(target=save_author_tweets)
  
     # starting thread 1
-    # t1.start()
+    t1.start()
     # starting thread 2
-    # t2.start()
+    t2.start()
     t3.start()
  
     # wait until thread 1 is completely executed
-    # t1.join()
+    t1.join()
     # wait until thread 2 is completely executed
-    # t2.join()
+    t2.join()
 
     t3.join()

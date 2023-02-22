@@ -11,6 +11,9 @@ from collections import defaultdict
 import networkx as nx
 from data_generator import translate
 from tw_sentiment import analysis
+import requests
+import json
+
 
 app = Flask(__name__)
 
@@ -28,26 +31,30 @@ def guide_delete(email):
         return dumps({'error' : str(e)})
 
 #Get recommended article id
-@app.route("/<string:id>", methods = ['GET'])
-def getNeighborBiggestDeggree(id):
+@app.route("/<string:id>/<string:target>", methods = ['GET'])
+def getNeighborBiggestDeggree(id, target):
     G = nx.read_gml("graphFile.py")
+    
     try:
         neighbors = nx.neighbors(G, id)
         maxDegreeNeighbor = max(G.degree(list(neighbors)))
-        # print(translate(maxDegreeNeighbor,'hello', 'en'))
-        return maxDegreeNeighbor
+        print(maxDegreeNeighbor[0])
+        return str(translate(target,maxDegreeNeighbor[0]))
     except Exception as e:
-        return dumps({'error' : str(e)})
+        return str(ts.google(target,maxDegreeNeighbor[0], from_language='auto', to_language=target))
 
 @app.route('/get/tweets/<string:name>', methods=["GET"])
 def get_tweets(name):
     dbname = get_database()  
-    tweets = dbname["tweets"].find_one({"author": name}, {"tweets" : 1})
-    tweets = json.loads(json.dumps(tweets, default=str))
-    tweets_sentiment = analysis(tweets['tweets'])
-    new_line = '\n'
-    result = f"{tweets} {new_line} Sentiment analysys: {tweets_sentiment}"
-    return  result
+    try :
+        tweets = dbname["tweets"].find_one({"author": name}, {"tweets" : 1})
+        tweets = json.loads(json.dumps(tweets, default=str))
+        tweets_sentiment = analysis(tweets['tweets'])
+        new_line = '\n'
+        result = f"{tweets} {new_line} Sentiment analysys: {tweets_sentiment}"
+        return result
+    except Exception as e:
+        return dumps({'error' : str(e)})    
 
 @app.route('/get/<string:email>', methods=["GET"])
 def get_data(email):
@@ -117,4 +124,4 @@ def post_data():
 
 
 if __name__ == '__main__':
-    app.run(host="localhost", port=8001, debug=True)
+    app.run(host="localhost", port=9000, debug=True)
