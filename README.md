@@ -7,10 +7,10 @@ python consumer.py
 python producer.py
 ```
 
-#Install Pytorch for sentiment analysis
-'''
+#I nstall Pytorch for sentiment analysis
+```
 pip3 install torch torchvision torchaudio
-'''
+```
 
 # Install and Run Kafka 3.3.1 On WSL
 ## Install java 
