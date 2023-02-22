@@ -40,8 +40,7 @@ def getNeighborBiggestDeggree(id, target):
         maxDegreeNeighbor = max(G.degree(list(neighbors)))
         article = find_article_byId(maxDegreeNeighbor[0])
         translated_Article = translate_text(str(article), target)
-
-        return "Recommended Article Translated in "+target+": "+translated_Article
+        return "Recommended Article's title Translated in "+target+": "+translated_Article
     except Exception as e:
         return dumps({'error' : str(e)})
 

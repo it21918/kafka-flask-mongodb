@@ -16,3 +16,4 @@ scipy
 detectlanguage
 googletrans
 azure-ai-textanalytics==5.2.0
+nltk

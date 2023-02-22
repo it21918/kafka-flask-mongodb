@@ -54,6 +54,7 @@ def translate_text(text, to_lang='en'):
     response = requests.post(constructed_url, headers=headers, json=body)
     json_response = response.json()
     translation = json_response[0]['translations'][0]['text']
+    print(translation)
     return translation
 
     
